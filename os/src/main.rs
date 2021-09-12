@@ -5,10 +5,12 @@
 #![feature(panic_info_message)]
 
 #[macro_use]
+extern crate log;
+
+#[macro_use]
 mod console;
 mod lang_items;
-#[macro_use]
-mod log;
+mod logging;
 mod sbi;
 
 global_asm!(include_str!("entry.asm"));
@@ -36,8 +38,16 @@ pub fn rust_main() -> ! {
         fn boot_stack_top();
     }
     clear_bss();
-    log::set_log_level(log::Level::Info);
-    debug!("Hello, world!");
+    logging::SimpleLogger::new()
+        .set_log_level("info")
+        .set_color(true)
+        .init()
+        .unwrap();
+    trace!("Hello, trace!");
+    debug!("Hello, debug!");
+    info!("Hello, info!");
+    warn!("Hello, warn!");
+    error!("Hello, error!");
     info!(".text [{:#x}, {:#x})", stext as usize, etext as usize);
     info!(".rodata [{:#x}, {:#x})", srodata as usize, erodata as usize);
     info!(".data [{:#x}, {:#x})", sdata as usize, edata as usize);
