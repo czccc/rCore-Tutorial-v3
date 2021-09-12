@@ -18,13 +18,16 @@ pub struct SimpleLogger {
 }
 
 impl SimpleLogger {
+    #[must_use = "You must call init() to begin logging"]
     pub fn new() -> Self {
         Self::default()
     }
+    #[must_use = "You must call init() to begin logging"]
     pub fn set_log_level(&mut self, level: &str) -> &mut Self {
         self.level = log::LevelFilter::from_str(level).unwrap();
         self
     }
+    #[must_use = "You must call init() to begin logging"]
     pub fn set_color(&mut self, color: bool) -> &mut Self {
         self.color = color;
         self
